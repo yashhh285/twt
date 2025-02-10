@@ -1,6 +1,7 @@
 import streamlit as st
 import tweepy
 from textblob import TextBlob
+import time
 
 # Streamlit app title
 st.title('Real-Time Brand Sentiment Analysis')
@@ -37,6 +38,10 @@ def fetch_tweets(query):
             else:
                 neutral += 1
         return positive, negative, neutral
+    except tweepy.RateLimitError:
+        st.write("Rate limit reached. Sleeping for 15 minutes...")
+        time.sleep(15 * 60)  # Sleep for 15 minutes
+        return fetch_tweets(query)  # Retry fetching after the sleep period
     except Exception as e:
         st.write(f"Error fetching tweets: {str(e)}")
         return 0, 0, 0
@@ -48,4 +53,3 @@ query = st.text_input("Enter a brand name or hashtag:", key="brand_input")
 if query:
     pos, neg, neut = fetch_tweets(query)
     st.write(f"Positive: {pos}, Negative: {neg}, Neutral: {neut}")
-
