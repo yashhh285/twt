@@ -38,7 +38,7 @@ def fetch_tweets(query):
             else:
                 neutral += 1
         return positive, negative, neutral
-    except tweepy.RateLimitError:
+    except tweepy.TooManyRequests as e:
         st.write("Rate limit reached. Sleeping for 15 minutes...")
         time.sleep(15 * 60)  # Sleep for 15 minutes
         return fetch_tweets(query)  # Retry fetching after the sleep period
