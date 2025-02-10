@@ -49,4 +49,3 @@ if query:
     pos, neg, neut = fetch_tweets(query)
     st.write(f"Positive: {pos}, Negative: {neg}, Neutral: {neut}")
 
-v
