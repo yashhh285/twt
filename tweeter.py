@@ -3,21 +3,19 @@ import tweepy
 from textblob import TextBlob
 import time
 
-# Streamlit app title
-st.title('Real-Time Brand Sentiment Analysis')
-
-# Authentication credentials
-consumer_key = '1NPBrF4NCv6yWs8W2F7rghvKo'
-consumer_secret = 'lwXiDqLdrfDJ6Ds22Fg6sbrxB0WarvUy6gc35o5uIPMZECdvsR'
-access_token = '1888768047424389120-zmWNFaYzLAf8NpC0Cx2sCxwNnduFjh'
-access_token_secret = 'anb4sQEfG3tYJYhjfzGa8ukm71WoJfPrRFNmJFCLYA2df'
+# Load credentials from Streamlit secrets
+consumer_key = st.secrets["TWITTER_CONSUMER_KEY"]
+consumer_secret = st.secrets["TWITTER_CONSUMER_SECRET"]
+access_token = st.secrets["TWITTER_ACCESS_TOKEN"]
+access_token_secret = st.secrets["TWITTER_ACCESS_TOKEN_SECRET"]
+bearer_token = st.secrets["TWITTER_BEARER_TOKEN"]
 
 # Set up authentication
 client = tweepy.Client(
-    bearer_token="AAAAAAAAAAAAAAAAAAAAAMXXywEAAAAAER6jKMv2LkBrbeozon7KqTSK4XU%3DVs7K9LhTtch1pFQWB52u8hAnTzDdFdqQinaCZ1z4nIxz9CkAqp", 
-    consumer_key=consumer_key, 
-    consumer_secret=consumer_secret, 
-    access_token=access_token, 
+    bearer_token=bearer_token,
+    consumer_key=consumer_key,
+    consumer_secret=consumer_secret,
+    access_token=access_token,
     access_token_secret=access_token_secret
 )
 
@@ -26,8 +24,14 @@ def fetch_tweets(query):
     try:
         st.write(f"Fetching tweets for: {query}")
         tweets = client.search_recent_tweets(query=query, max_results=100, tweet_fields=["text"])
+
+        if tweets.data is None:
+            st.write("No tweets found for this query.")
+            return 0, 0, 0
+
         st.write(f"Found {len(tweets.data)} tweets.")
         positive, negative, neutral = 0, 0, 0
+
         for tweet in tweets.data:
             blob = TextBlob(tweet.text)
             sentiment = blob.sentiment.polarity
@@ -38,10 +42,12 @@ def fetch_tweets(query):
             else:
                 neutral += 1
         return positive, negative, neutral
-    except tweepy.TooManyRequests as e:
+
+    except tweepy.TooManyRequests:
         st.write("Rate limit reached. Sleeping for 15 minutes...")
-        time.sleep(15 * 60)  # Sleep for 15 minutes
-        return fetch_tweets(query)  # Retry fetching after the sleep period
+        time.sleep(15 * 60)  # Sleep for 15 minutes before retrying
+        return fetch_tweets(query)
+
     except Exception as e:
         st.write(f"Error fetching tweets: {str(e)}")
         return 0, 0, 0
