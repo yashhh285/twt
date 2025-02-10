@@ -13,7 +13,7 @@ access_token_secret = 'anb4sQEfG3tYJYhjfzGa8ukm71WoJfPrRFNmJFCLYA2df'
 
 # Set up authentication
 client = tweepy.Client(
-    bearer_token="YOUR_BEARER_TOKEN", 
+    bearer_token="AAAAAAAAAAAAAAAAAAAAAMXXywEAAAAAER6jKMv2LkBrbeozon7KqTSK4XU%3DVs7K9LhTtch1pFQWB52u8hAnTzDdFdqQinaCZ1z4nIxz9CkAqp", 
     consumer_key=consumer_key, 
     consumer_secret=consumer_secret, 
     access_token=access_token, 
