@@ -6,10 +6,10 @@ from textblob import TextBlob
 st.title('Real-Time Brand Sentiment Analysis')
 
 # Authentication credentials
-consumer_key = 'YOUR_CONSUMER_KEY'
-consumer_secret = 'YOUR_CONSUMER_SECRET'
-access_token = 'YOUR_ACCESS_TOKEN'
-access_token_secret = 'YOUR_ACCESS_TOKEN_SECRET'
+consumer_key = '1NPBrF4NCv6yWs8W2F7rghvKo'
+consumer_secret = 'lwXiDqLdrfDJ6Ds22Fg6sbrxB0WarvUy6gc35o5uIPMZECdvsR'
+access_token = '1888768047424389120-zmWNFaYzLAf8NpC0Cx2sCxwNnduFjh'
+access_token_secret = 'anb4sQEfG3tYJYhjfzGa8ukm71WoJfPrRFNmJFCLYA2df'
 
 # Set up authentication
 client = tweepy.Client(
